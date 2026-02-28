@@ -75,10 +75,12 @@ public class MyCustomModel implements Comparable<MyCustomModel> {
 
     @Override
     public String toString() {
-        return "Object{" +
+        String done="not done";
+        if(isTrue) done = "done";
+        return "Task{" +
                 "name='" + name + '\'' +
-                ", number=" + number +
-                ", isTrue=" + isTrue +
+                ", priority=" + number +
+                ", status=" + done +
                 '}';
     }
 

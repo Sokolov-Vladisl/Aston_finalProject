@@ -104,7 +104,7 @@ public class Main {
     }
 
     private static void fillCollection(MyCustomCollection<?> collection, Object filler) {
-        System.out.println("Выберите способ заполнения для MyCustomModel:");
+        System.out.println("Выберите способ заполнения для Задач:");
         System.out.println("1. Вручную");
         System.out.println("2. Случайно");
         System.out.println("3. Из файла");
@@ -118,23 +118,21 @@ public class Main {
         
         switch (fillChoice) {
             case 1:
-                        //strategy = new manualFill();
-                        //break;
+                strategy = new manualFill();
+                break;
             case 2:
                 strategy = new randomFill();
                 break;
-                case 3:
-                    System.out.print("Введите имя файла: ");
-                        //String fileName = scanner.nextLine();
-                        //strategy = new fileFill(fileName);
-                        //break;
+            case 3:
+                strategy = new fileFill();
+                break;
             default:
                 System.out.println("Неверный выбор.");
                 return;
         }
         modelFiller.setStrategy(strategy);
         modelCollection = modelFiller.fill(size);
-        System.out.println("Коллекция MyCustomModel заполнена. Размер: " + modelCollection.size());
+        System.out.println("Коллекция Задач заполнена. Размер: " + modelCollection.size());
         
         
     }
@@ -143,19 +141,19 @@ public class Main {
 
     private static <T extends Comparable<T>> void searchData(MyCustomCollection<T> collection) {
         if (collection == null || collection.size() == 0) {
-            System.out.println("Сначала заполните и отсортируйте коллекцию MyCustomModel.");
+            System.out.println("Сначала заполните и отсортируйте коллекцию Задач.");
             return;
         }
 
-        System.out.println("Введите данные для поиска MyCustomModel:");
+        System.out.println("Введите данные для поиска Задачи:");
         T target = null;
 
 
-        System.out.print("Name: ");
+        System.out.print("Название: ");
         String name = scanner.nextLine();
-        System.out.print("Number: ");
+        System.out.print("Приоритет: ");
         String number = scanner.nextLine();
-        System.out.print("Is it true: ");
+        System.out.print("Статус (выполнена? true/false): ");
         String isTrue = scanner.nextLine();
 
         try {
@@ -181,20 +179,19 @@ public class Main {
 
     private static <T> void occurrenceCounter(MyCustomCollection<T> collection) {
         if (collection == null || collection.size() == 0) {
-            System.out.println("Сначала заполните коллекцию MyCustomModel.");
+            System.out.println("Сначала заполните коллекцию Задач.");
             return;
         }
 
-        System.out.println("Введите данные для подсчёта вхождений MyCustomModel:");
+        System.out.println("Введите данные для подсчёта вхождений Задачи:");
         T target = null;
 
-        System.out.print("Name: ");
+        System.out.print("Название: ");
         String name = scanner.nextLine();
-        System.out.print("Number: ");
+        System.out.print("Приоритет: ");
         String number = scanner.nextLine();
-        System.out.print("Is it true: ");
+        System.out.print("Статус (выполнена? true/false): ");
         String isTrue = scanner.nextLine();
-
 
         try {
             target = (T) MyCustomModel.builder()
@@ -216,9 +213,9 @@ public class Main {
     // Пример метода для печати коллекции
     private static void printCollection(MyCustomCollection<?> collection) {
         if (collection == null) {
-            System.out.println("Коллекция MyCustomModel пуста (не инициализирована).");
+            System.out.println("Коллекция Задач пуста (не инициализирована).");
         } else {
-            System.out.println("Текущая коллекция MyCustomModel:");
+            System.out.println("Текущая коллекция Задач:");
             for (int i = 0; i < collection.size(); i++) {
                 System.out.println(collection.get(i));
             }

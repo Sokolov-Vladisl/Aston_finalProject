@@ -16,9 +16,9 @@ public class randomFill implements DataFillStrategy<MyCustomModel> {
         MyCustomCollection<MyCustomModel> list = new MyCustomCollection<>(size);
         IntStream.range(0, size)
                 .mapToObj(i -> MyCustomModel.builder()
-                        .number(random.nextInt(60))
+                        .number(random.nextInt(10)+1)
                         .isTrue(random.nextBoolean())
-                        .name("Robert " + random.nextInt(Math.abs(size)))
+                        .name("Task " + random.nextInt(Math.abs(size)))
                         .build())
                 .forEach(list::add);
 
