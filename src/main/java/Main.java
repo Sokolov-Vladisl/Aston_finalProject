@@ -192,6 +192,12 @@ public class Main {
                 System.out.println("Неверный выбор! Попробуйте еще раз");
                 continue;
             }
+            System.out.println("Направление сортировки:");
+            System.out.println("1. По возрастанию");
+            System.out.println("2. По убыванию");
+            System.out.print("Выбор (1-2): ");
+            int answer = getChoice();
+            boolean revers = (answer == 1);
 
             Comparator<MyCustomModel> fieldComparator = switch (choice) {
                 case 1 -> Comparator.comparing(MyCustomModel::getNumber);
@@ -199,6 +205,9 @@ public class Main {
                 case 3 -> Comparator.comparing(MyCustomModel::getStatus);
                 default -> null;
             };
+            if (!revers) {
+                fieldComparator = fieldComparator.reversed();
+            }
 
             if (comparator == null) {
                 comparator = fieldComparator;
