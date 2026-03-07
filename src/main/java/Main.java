@@ -58,7 +58,7 @@ public class Main {
     private static void printMainMenu() {
         System.out.println("\n--- Главное меню ---");
         System.out.println("1. Работа с MyCustomModel");
-        System.out.println("3. Выйти");
+        System.out.println("2. Выйти");
         System.out.print("Выберите действие: ");
     }
 
@@ -73,16 +73,36 @@ public class Main {
                     fillCollection(modelCollection, modelFiller);
                     break;
                 case 2: // Сортировать MyCustomModel
+                    // Здесь будет сортировка
+                    System.out.println("Сортировка пока не реализована");
                     break;
-                case 3: // Найти MyCustomModel
+                case 3: // Найти MyCustomModel (бинарный поиск)
+                    if (modelCollection != null && modelCollection.size() > 0) {
+                        // Проверяем, отсортирована ли коллекция
+                        MyBinarySearch<MyCustomModel> binarySearch = new MyBinarySearch<>(modelCollection);
+                        if (!binarySearch.isSorted()) {
+                            System.out.println("Внимание: для бинарного поиска коллекция должна быть отсортирована!");
+                            System.out.print("Хотите продолжить? (y/n): ");
+                            String answer = scanner.nextLine();
+                            if (!answer.equalsIgnoreCase("y")) {
+                                break;
+                            }
+                        }
+                        searchData(modelCollection);
+                    } else {
+                        System.out.println("Сначала заполните коллекцию.");
+                    }
                     break;
                 case 4: // Показать MyCustomModel
                     printCollection(modelCollection);
                     break;
-                case 5: // Подсчет вхождений MyCustomModel
+                case 5: // Обычный подсчет вхождений
                     occurrenceCounter(modelCollection);
                     break;
-                case 6: // Вернуться к главному меню
+                case 6: // Многопоточный подсчет вхождений (НОВЫЙ ПУНКТ)
+                    occurrenceCounterMultiThreaded(modelCollection);
+                    break;
+                case 7: // Вернуться к главному меню
                     modelMenuRunning = false;
                     break;
                 default:
@@ -90,18 +110,71 @@ public class Main {
             }
         }
     }
-    
+
+    private static void occurrenceCounterMultiThreaded(MyCustomCollection<MyCustomModel> collection) {
+        if (collection == null || collection.size() == 0) {
+            System.out.println("Сначала заполните коллекцию Задач.");
+            return;
+        }
+
+        System.out.println("--- Многопоточный подсчёт вхождений ---");
+        System.out.println("Введите данные для подсчёта вхождений Задачи:");
+
+        System.out.print("Название: ");
+        String name = scanner.nextLine();
+        System.out.print("Приоритет: ");
+        String number = scanner.nextLine();
+        System.out.print("Статус (выполнена? true/false): ");
+        String isTrue = scanner.nextLine();
+
+        try {
+            MyCustomModel target = MyCustomModel.builder()
+                    .name(name)
+                    .number(Integer.parseInt(number))
+                    .isTrue(Boolean.parseBoolean(isTrue))
+                    .build();
+
+            System.out.println("Выберите метод:");
+            System.out.println("1. MultiThreaded (parallelStream)");
+            System.out.println("2. Manual Threads");
+            System.out.print("Выбор: ");
+
+            int choice = getChoice();
+            long occurrences;
+            long startTime = System.currentTimeMillis();
+
+            if (choice == 2) {
+                System.out.print("Количество потоков (0 - авто): ");
+                int threads = getChoice();
+                occurrences = collection.getOccurrenceCounterManualThreads(target, threads);
+            } else {
+                occurrences = collection.getOccurrenceCounterMultiThreaded(target);
+            }
+
+            long endTime = System.currentTimeMillis();
+
+            System.out.println("Элемент встречается: " + occurrences + " раз(а)");
+            System.out.println("Время выполнения: " + (endTime - startTime) + " мс");
+
+        } catch (RuntimeException e) {
+            System.out.println("Ошибка: " + e.getMessage());
+        }
+    }
 
     private static void printEntityMenu() {
         System.out.println("\n--- Меню ---");
         System.out.println("1. Заполнить данные");
         System.out.println("2. Сортировать данные");
-        System.out.println("3. Найти элемент (поиск)");
+        System.out.println("3. Найти элемент (бинарный поиск)");
         System.out.println("4. Показать текущий список");
-        System.out.println("5. Подсчет вхождений");
-        System.out.println("6. Назад");
+        System.out.println("5. Подсчет вхождений (обычный)");
+        System.out.println("6. Подсчет вхождений (многопоточный)");
+        System.out.println("7. Назад");
         System.out.print("Выберите действие: ");
     }
+    
+
+
 
     private static void fillCollection(MyCustomCollection<?> collection, Object filler) {
         System.out.println("Выберите способ заполнения для Задач:");
@@ -137,7 +210,7 @@ public class Main {
         
     }
 
-   // private static void sortCollection(){}
+//   private static void sortCollection(){}
 
     private static <T extends Comparable<T>> void searchData(MyCustomCollection<T> collection) {
         if (collection == null || collection.size() == 0) {
@@ -167,14 +240,14 @@ public class Main {
             return;
         }
 
-//        MyBinarySearch<T> binarySearch = new MyBinarySearch<>(collection);
-//        int index = binarySearch.getIndexedBinarySearch(target);
+        MyBinarySearch<T> binarySearch = new MyBinarySearch<>(collection);
+        int index = binarySearch.getIndexedBinarySearch(target);
 
-//        if (index >= 0) {
-//            System.out.println("MyCustomModel найден: " + collection.get(index) + " на позиции " + index);
-//        } else {
-//            System.out.println("MyCustomModel не найден. Индекс для вставки: " + (-index - 1));
-//        }
+        if (index >= 0) {
+            System.out.println("MyCustomModel найден: " + collection.get(index) + " на позиции " + index);
+        } else {
+            System.out.println("MyCustomModel не найден. Индекс для вставки: " + (-index - 1));
+        }
     }
 
     private static <T> void occurrenceCounter(MyCustomCollection<T> collection) {
