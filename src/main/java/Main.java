@@ -6,13 +6,14 @@ import inputStrategy.manualFill;
 import inputStrategy.MyCustomModelFiller;
 import inputStrategy.randomFill;
 import model.MyCustomModel;
+import sorting.QuickSort;
+import sorting.SortService;
 
 //import search.MyBinarySearch;
 
 //import sorting.MultiThreadSorting;
 //import sorting.QuickSort;
-//import sorting.SortService;
-//import sorting.SortStrategy;
+
 
 import java.util.Comparator;
 import java.util.Scanner;
@@ -30,7 +31,7 @@ public class Main {
     private static final MyCustomModelFiller modelFiller = new MyCustomModelFiller();
 
     // Поля для сервисов сортировки
-   // private static final SortService<MyCustomModel> personSortService = new SortService<>();
+   private static final SortService personSortService = new SortService();
 
 
     public static int M=0;
@@ -58,7 +59,7 @@ public class Main {
     private static void printMainMenu() {
         System.out.println("\n--- Главное меню ---");
         System.out.println("1. Работа с MyCustomModel");
-        System.out.println("3. Выйти");
+        System.out.println("2. Выйти");
         System.out.print("Выберите действие: ");
     }
 
@@ -73,6 +74,7 @@ public class Main {
                     fillCollection(modelCollection, modelFiller);
                     break;
                 case 2: // Сортировать MyCustomModel
+                    sortCollection(modelCollection);
                     break;
                 case 3: // Найти MyCustomModel
                     break;
@@ -137,7 +139,88 @@ public class Main {
         
     }
 
-   // private static void sortCollection(){}
+    private static void sortCollection(MyCustomCollection<MyCustomModel> collection){
+        if (collection == null || collection.size() == 0) {
+            System.out.println("Сначала заполните коллекцию Задач.");
+            return;
+        }
+        System.out.println("Выберите способ сортировки для Задач:");
+        System.out.println("1. Быстрая сортировка");
+        System.out.println("2. Сортировка по приоритету задач только четных значений");
+        System.out.print("Выбор: ");
+        int sortChoice = getChoice();
+
+        SortService service = new SortService();
+
+        switch (sortChoice) {
+            case 1:
+                service.setStrategy(new QuickSort<>());
+                Comparator<MyCustomModel> comparator = choiceComparator();
+                service.sort(collection, comparator);
+                System.out.println("Коллекция отсортирована!");
+                break;
+            case 2:
+//                service.setStrategy(new MultiThreadSorting<>());
+               break;
+            default:
+                System.out.println("Неверный выбор.");
+                return;
+        }
+
+    }
+
+    private static Comparator<MyCustomModel> choiceComparator(){
+
+        Comparator<MyCustomModel> comparator = null;
+        int fieldsSelected = 0;
+        
+        while (fieldsSelected <= 3) {
+            System.out.println("Выберите по какому полю сортировать Задачи:");
+            System.out.println("0. выбор закончен");
+            System.out.println("1. по приоритету");
+            System.out.println("2. по названию");
+            System.out.println("3. по статусу");
+            System.out.print("Выбор(0-3): ");
+
+            int choice = getChoice();
+            if (choice == 0 && fieldsSelected != 0) break;
+            if (choice == 0){
+                System.out.println("С начало выберите поля для сортировки");
+                continue;
+            }
+            if (choice < 1 || choice > 3) {
+                System.out.println("Неверный выбор! Попробуйте еще раз");
+                continue;
+            }
+            System.out.println("Направление сортировки:");
+            System.out.println("1. По возрастанию");
+            System.out.println("2. По убыванию");
+            System.out.print("Выбор (1-2): ");
+            int answer = getChoice();
+            boolean revers = (answer == 1);
+
+            Comparator<MyCustomModel> fieldComparator = switch (choice) {
+                case 1 -> Comparator.comparing(MyCustomModel::getNumber);
+                case 2 -> Comparator.comparing(MyCustomModel::getName);
+                case 3 -> Comparator.comparing(MyCustomModel::getStatus);
+                default -> null;
+            };
+            if (!revers) {
+                fieldComparator = fieldComparator.reversed();
+            }
+
+            if (comparator == null) {
+                comparator = fieldComparator;
+            } else {
+                comparator = comparator.thenComparing(fieldComparator);
+            }
+
+            System.out.println("Поле добавлено к сортировке");
+            fieldsSelected++;
+        }
+
+        return comparator;
+    }
 
     private static <T extends Comparable<T>> void searchData(MyCustomCollection<T> collection) {
         if (collection == null || collection.size() == 0) {
