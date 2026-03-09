@@ -88,12 +88,7 @@ public class MyCustomCollection<T> implements Iterable<T> {
         );
     }
 
-    private Stream<T> parallelStream() {
-        return StreamSupport.stream(
-                java.util.Spliterators.spliterator(array, 0, size, Spliterator.ORDERED),
-                true
-        );
-    }
+
 
     public long getOccurrenceCounter(T target) {
         long count = this.parallelStream()
@@ -117,5 +112,68 @@ public class MyCustomCollection<T> implements Iterable<T> {
     @Override
     public int hashCode() {
         return Arrays.hashCode(array);
+    }
+
+    public Stream<T> parallelStream() {
+        return StreamSupport.stream(
+                java.util.Spliterators.spliterator(array, 0, size, Spliterator.ORDERED),
+                true  // true для параллельного стрима
+        );
+    }
+
+    public long getOccurrenceCounterMultiThreaded(T target) {
+        return this.parallelStream()
+                .filter(i -> i != null && i.equals(target))
+                .count();
+    }
+
+    public long getOccurrenceCounterManualThreads(T target, int numberOfThreads) {
+        if (size == 0) return 0;
+        if (numberOfThreads <= 0) {
+            numberOfThreads = Runtime.getRuntime().availableProcessors();
+        }
+
+        // Ограничиваем количество потоков размером коллекции
+        numberOfThreads = Math.min(numberOfThreads, size);
+
+        long[] results = new long[numberOfThreads];
+        Thread[] threads = new Thread[numberOfThreads];
+        int segmentSize = (size + numberOfThreads - 1) / numberOfThreads;
+
+        for (int t = 0; t < numberOfThreads; t++) {
+            final int threadIndex = t;
+            final int start = t * segmentSize;
+            final int end = Math.min(start + segmentSize, size);
+
+            threads[t] = new Thread(() -> {
+                long count = 0;
+                for (int i = start; i < end; i++) {
+                    T element = array[i];
+                    if (element != null && element.equals(target)) {
+                        count++;
+                    }
+                }
+                results[threadIndex] = count;
+            });
+            threads[t].start();
+        }
+
+        // Ждем завершения всех потоков
+        for (Thread thread : threads) {
+            try {
+                thread.join();
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+                System.err.println("Поток был прерван: " + e.getMessage());
+            }
+        }
+
+        // Суммируем результаты
+        long total = 0;
+        for (long result : results) {
+            total += result;
+        }
+
+        return total;
     }
 }
