@@ -74,7 +74,15 @@ public class Main {
                     fillCollection(modelCollection, modelFiller);
                     break;
                 case 2: // Сортировать MyCustomModel
+
+
+                    // Здесь будет сортировка
+                    System.out.println("Сортировка пока не реализована");
+
                     sortCollection(modelCollection);
+
+                    sortCollection(modelCollection);
+
                     break;
                 case 3: // Найти MyCustomModel (бинарный поиск)
                     if (modelCollection != null && modelCollection.size() > 0) {
@@ -210,6 +218,8 @@ public class Main {
         
     }
 
+
+//   private static void sortCollection(){}
     private static void sortCollection(MyCustomCollection<MyCustomModel> collection){
         if (collection == null || collection.size() == 0) {
             System.out.println("Сначала заполните коллекцию Задач.");
@@ -292,6 +302,7 @@ public class Main {
 
         return comparator;
     }
+
 
     private static <T extends Comparable<T>> void searchData(MyCustomCollection<T> collection) {
         if (collection == null || collection.size() == 0) {
