@@ -9,7 +9,7 @@ import model.MyCustomModel;
 import sorting.QuickSort;
 import sorting.SortService;
 
-//import search.MyBinarySearch;
+import search.MyBinarySearch;
 
 //import sorting.MultiThreadSorting;
 //import sorting.QuickSort;
@@ -77,10 +77,6 @@ public class Main {
 
 
                     // Здесь будет сортировка
-                    System.out.println("Сортировка пока не реализована");
-
-                    sortCollection(modelCollection);
-
                     sortCollection(modelCollection);
 
                     break;
