@@ -11,7 +11,7 @@ import sorting.EvenQuickSort;
 import sorting.QuickSort;
 import sorting.SortService;
 
-//import search.MyBinarySearch;
+import search.MyBinarySearch;
 
 //import sorting.MultiThreadSorting;
 //import sorting.QuickSort;
