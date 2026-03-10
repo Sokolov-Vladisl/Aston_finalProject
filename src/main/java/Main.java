@@ -6,6 +6,8 @@ import inputStrategy.manualFill;
 import inputStrategy.MyCustomModelFiller;
 import inputStrategy.randomFill;
 import model.MyCustomModel;
+import search.MyBinarySearch;
+import sorting.EvenQuickSort;
 import sorting.QuickSort;
 import sorting.SortService;
 
@@ -74,12 +76,6 @@ public class Main {
                     fillCollection(modelCollection, modelFiller);
                     break;
                 case 2: // Сортировать MyCustomModel
-
-
-                    // Здесь будет сортировка
-                    System.out.println("Сортировка пока не реализована");
-
-                    sortCollection(modelCollection);
 
                     sortCollection(modelCollection);
 
@@ -180,8 +176,6 @@ public class Main {
         System.out.println("7. Назад");
         System.out.print("Выберите действие: ");
     }
-    
-
 
 
     private static void fillCollection(MyCustomCollection<?> collection, Object filler) {
@@ -214,12 +208,11 @@ public class Main {
         modelFiller.setStrategy(strategy);
         modelCollection = modelFiller.fill(size);
         System.out.println("Коллекция Задач заполнена. Размер: " + modelCollection.size());
-        
+
         
     }
 
 
-//   private static void sortCollection(){}
     private static void sortCollection(MyCustomCollection<MyCustomModel> collection){
         if (collection == null || collection.size() == 0) {
             System.out.println("Сначала заполните коллекцию Задач.");
@@ -241,8 +234,10 @@ public class Main {
                 System.out.println("Коллекция отсортирована!");
                 break;
             case 2:
-//                service.setStrategy(new MultiThreadSorting<>());
-               break;
+                service.setStrategy(new EvenQuickSort<>(MyCustomModel::getNumber));
+                service.sort(collection);
+                System.out.println("Коллекция отсортирована!");
+                break;
             default:
                 System.out.println("Неверный выбор.");
                 return;

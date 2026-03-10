@@ -89,5 +89,44 @@ public class QuickSortTest {
             );
         }
     }
+    @Test
+    public void testQuickSortNameAndNumber(){
+        sortService.setStrategy(new QuickSort<>());
+        Comparator<MyCustomModel> comparator = Comparator.comparing(MyCustomModel::getName).thenComparing(MyCustomModel::getNumber);
+        List<MyCustomModel> expectedList = new ArrayList<>();
+        for (int i = 0; i < collection.size(); i++) {
+            expectedList.add(collection.get(i));
+        }
+        expectedList.sort(comparator);
+
+        sortService.sort(collection, comparator);
+
+        for (int i = 0; i < collection.size(); i++) {
+            assertEquals(
+                    expectedList.get(i).getName(),
+                    collection.get(i).getName(),
+                    "Несовпадение на индексе " + i
+            );
+        }
+    }
+    @Test
+    public void testQuickSortNoComparator(){
+        sortService.setStrategy(new QuickSort<>());
+        List<MyCustomModel> expectedList = new ArrayList<>();
+        for (int i = 0; i < collection.size(); i++) {
+            expectedList.add(collection.get(i));
+        }
+        expectedList.sort(Comparator.naturalOrder());
+
+        sortService.sort(collection);
+
+        for (int i = 0; i < collection.size(); i++) {
+            assertEquals(
+                    expectedList.get(i).getName(),
+                    collection.get(i).getName(),
+                    "Несовпадение на индексе " + i
+            );
+        }
+    }
 
 }
