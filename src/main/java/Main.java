@@ -17,6 +17,8 @@ import search.MyBinarySearch;
 
 import java.util.Comparator;
 import java.util.Scanner;
+import java.util.List;
+import validation.Validation;
 
 //import static output.WriteDown.MyOutput;
 
@@ -184,24 +186,36 @@ public class Main {
         System.out.println("Выберите способ заполнения для Задач:");
         System.out.println("1. Вручную");
         System.out.println("2. Случайно");
-        System.out.println("3. Из файла");
+        System.out.println("3. Из файла (Validation)");
         System.out.print("Выбор: ");
         int fillChoice = getChoice();
+
+        DataFillStrategy strategy;
+
+        if (fillChoice == 3) {
+            Validation validation = new Validation(scanner);
+            List<MyCustomModel> models = validation.selectFileSource();
+            if (models != null && !models.isEmpty()) {
+                modelCollection = new MyCustomCollection<>(models.size());
+                for (MyCustomModel model : models) {
+                    modelCollection.add(model);
+                }
+                System.out.println("Коллекция Задач заполнена из файла. Размер: " + modelCollection.size());
+            } else {
+                System.out.println("Не удалось загрузить данные из файла.");
+            }
+            return;
+        }
 
         System.out.print("Введите размер коллекции: ");
         int size = Integer.parseInt(scanner.nextLine());
 
-        DataFillStrategy strategy;
-        
         switch (fillChoice) {
             case 1:
                 strategy = new manualFill();
                 break;
             case 2:
                 strategy = new randomFill();
-                break;
-            case 3:
-                strategy = new fileFill();
                 break;
             default:
                 System.out.println("Неверный выбор.");
@@ -210,8 +224,6 @@ public class Main {
         modelFiller.setStrategy(strategy);
         modelCollection = modelFiller.fill(size);
         System.out.println("Коллекция Задач заполнена. Размер: " + modelCollection.size());
-        
-        
     }
 
 
