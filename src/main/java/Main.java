@@ -116,7 +116,11 @@ public class Main {
                 case 7:
                     saveToFile();
                     break;
-                case 8: // Вернуться к главному меню
+                case 8:
+                    modelCollection = null;
+                    break;
+
+                case 9: // Вернуться к главному меню
                     modelMenuRunning = false;
                     break;
                 default:
@@ -184,7 +188,8 @@ public class Main {
         System.out.println("5. Подсчет вхождений (обычный)");
         System.out.println("6. Подсчет вхождений (многопоточный)");
         System.out.println("7. Сохранить в файл");
-        System.out.println("8. Назад");
+        System.out.println("8. Стереть список");
+        System.out.println("9. Назад");
         System.out.print("Выберите действие: ");
     }
 
