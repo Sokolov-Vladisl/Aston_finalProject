@@ -219,7 +219,7 @@ public class Validation {
 
             String name = parts[0].trim();
             Integer priority = Integer.parseInt(parts[1].trim());
-            Boolean status = Boolean.parseBoolean(parts[2].trim());
+            Boolean status = "done".equalsIgnoreCase(parts[2].trim());
 
             return MyCustomModel.builder()
                     .name(name)

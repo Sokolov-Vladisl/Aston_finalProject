@@ -338,6 +338,7 @@ public class Main {
             Path filePath = Paths.get(filename + ".txt");
 
             List<String> lines = new ArrayList<>();
+            lines.add("");lines.add("");lines.add("");lines.add("");
             lines.add("=== РЕЗУЛЬТАТ СОРТИРОВКИ ===");
             lines.add("Поле сортировки: " + sortType);
             lines.add("Всего элементов: " + modelCollection.size());
@@ -351,7 +352,7 @@ public class Main {
                 MyCustomModel item = modelCollection.get(i);
                 lines.add((i + 1) + ". " + item.toString());
             }
-            lines.add("");lines.add("");lines.add("");lines.add("");
+
 
 
             Files.write(filePath, lines, StandardOpenOption.CREATE,
