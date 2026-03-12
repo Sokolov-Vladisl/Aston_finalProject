@@ -1,0 +1,17 @@
+=== РЕЗУЛЬТАТ СОРТИРОВКИ ===
+Поле сортировки: current
+Всего элементов: 10
+Дата: 2026-03-11 19:22:18
+
+Содержимое:
+
+1. Task{name='Ввод значений', priority=1, status=done}
+2. Task{name='Всякая мишура', priority=10, status=not done}
+3. Task{name='Вывод в файл', priority=5, status=not done}
+4. Task{name='Многопоточный метод', priority=7, status=not done}
+5. Task{name='Поиск числа вхождений', priority=6, status=done}
+6. Task{name='Придумать модель', priority=7, status=done}
+7. Task{name='Рабочий main', priority=1, status=done}
+8. Task{name='Своя коллекция', priority=9, status=done}
+9. Task{name='Сортировка', priority=4, status=not done}
+10. Task{name='Тесты', priority=5, status=not done}
