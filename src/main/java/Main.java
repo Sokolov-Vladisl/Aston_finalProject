@@ -338,7 +338,6 @@ public class Main {
             Path filePath = Paths.get(filename + ".txt");
 
             List<String> lines = new ArrayList<>();
-            lines.add("");lines.add("");lines.add("");lines.add("");
             lines.add("=== РЕЗУЛЬТАТ СОРТИРОВКИ ===");
             lines.add("Поле сортировки: " + sortType);
             lines.add("Всего элементов: " + modelCollection.size());
