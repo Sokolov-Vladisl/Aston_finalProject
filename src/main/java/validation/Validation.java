@@ -16,8 +16,7 @@ import java.util.stream.Collectors;
 public class Validation {
     private final Scanner scanner;
     private static final String DEFAULT_FILENAME = "tasks.csv";
-    private static final String SORTED_PRIORITY_FILENAME = "output/sorted_by_priority.csv";
-    private static final String SORTED_NAME_FILENAME = "output/sorted_by_name.csv";
+    private static final String SORTED_PRIORITY_FILENAME = "output/sorted_by_even.csv";
 
     public Validation(Scanner scanner) {
         this.scanner = scanner;
@@ -56,12 +55,6 @@ public class Validation {
                     }
                     break;
                 case 4:
-                    List<MyCustomModel> nameResult = loadFromSortedByName();
-                    if (nameResult != null) {
-                        return nameResult;
-                    }
-                    break;
-                case 5:
                     System.out.println("Возврат в предыдущее меню.");
                     return null;
                 default:
@@ -79,7 +72,7 @@ public class Validation {
             return null;
         }
 
-        return loadFromFile(filename);
+        return loadFromFile("output/"+filename);
     }
 
     private List<MyCustomModel> loadFromDefaultFile() {
@@ -88,14 +81,10 @@ public class Validation {
     }
 
     private List<MyCustomModel> loadFromSortedByPriority() {
-        System.out.println("Загрузка файла, отсортированного по приоритету: " + SORTED_PRIORITY_FILENAME);
+        System.out.println("Загрузка файла, отсортированного по чётности приоритета: " + SORTED_PRIORITY_FILENAME);
         return loadFromFile(SORTED_PRIORITY_FILENAME);
     }
 
-    private List<MyCustomModel> loadFromSortedByName() {
-        System.out.println("Загрузка файла, отсортированного по названию: " + SORTED_NAME_FILENAME);
-        return loadFromFile(SORTED_NAME_FILENAME);
-    }
 
     private List<MyCustomModel> loadFromFile(String filename) {
         try {
@@ -266,9 +255,8 @@ public class Validation {
         System.out.println("\n=== Выбор источника данных ===");
         System.out.println("1. Ввести имя файла вручную");
         System.out.println("2. Использовать файл по умолчанию (tasks.csv)");
-        System.out.println("3. Загрузить отсортированный по приоритету (output/sorted_by_priority.csv)");
-        System.out.println("4. Загрузить отсортированный по названию (output/sorted_by_name.csv)");
-        System.out.println("5. Назад");
+        System.out.println("3. Загрузить отсортированный по приоритету (output/sorted_by_even.csv)");
+        System.out.println("4. Назад");
         System.out.print("Ваш выбор: ");
     }
 

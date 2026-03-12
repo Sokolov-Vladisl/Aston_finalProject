@@ -83,6 +83,11 @@ public class MyCustomModel implements Comparable<MyCustomModel> {
                 ", status=" + done +
                 '}';
     }
+    public String toFileData() {
+        String done="not done";
+        if(isTrue) done = "done";
+        return name +"," + number +"," + done;
+    }
 
     @Override
     public int hashCode() {

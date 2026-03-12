@@ -1,0 +1,57 @@
+=== РЕЗУЛЬТАТ СОРТИРОВКИ ===
+Поле сортировки: 1
+Всего элементов: 50
+Дата: 2026-03-12 14:14:07
+
+Содержимое:
+
+1. Task{name='Task 36', priority=10, status=done}
+2. Task{name='Task 41', priority=3, status=done}
+3. Task{name='Task 27', priority=3, status=done}
+4. Task{name='Task 10', priority=8, status=done}
+5. Task{name='Task 25', priority=2, status=done}
+6. Task{name='Task 25', priority=2, status=done}
+7. Task{name='Task 20', priority=5, status=done}
+8. Task{name='Task 1', priority=2, status=done}
+9. Task{name='Task 33', priority=8, status=done}
+10. Task{name='Task 45', priority=6, status=done}
+11. Task{name='Task 34', priority=10, status=done}
+12. Task{name='Task 45', priority=6, status=done}
+13. Task{name='Task 37', priority=3, status=done}
+14. Task{name='Task 15', priority=10, status=done}
+15. Task{name='Task 43', priority=5, status=done}
+16. Task{name='Task 46', priority=4, status=done}
+17. Task{name='Task 44', priority=5, status=done}
+18. Task{name='Task 12', priority=8, status=done}
+19. Task{name='Task 1', priority=7, status=done}
+20. Task{name='Task 23', priority=9, status=done}
+21. Task{name='Task 36', priority=2, status=done}
+22. Task{name='Task 44', priority=7, status=done}
+23. Task{name='Task 30', priority=10, status=done}
+24. Task{name='Task 49', priority=3, status=done}
+25. Task{name='Task 33', priority=3, status=done}
+26. Task{name='Task 34', priority=1, status=done}
+27. Task{name='Task 2', priority=3, status=done}
+28. Task{name='Task 15', priority=9, status=done}
+29. Task{name='Task 17', priority=8, status=done}
+30. Task{name='Task 42', priority=7, status=done}
+31. Task{name='Task 9', priority=10, status=not done}
+32. Task{name='Task 2', priority=4, status=not done}
+33. Task{name='Task 43', priority=7, status=not done}
+34. Task{name='Task 11', priority=1, status=not done}
+35. Task{name='Task 24', priority=9, status=not done}
+36. Task{name='Task 20', priority=9, status=not done}
+37. Task{name='Task 28', priority=1, status=not done}
+38. Task{name='Task 48', priority=4, status=not done}
+39. Task{name='Task 25', priority=7, status=not done}
+40. Task{name='Task 2', priority=2, status=not done}
+41. Task{name='Task 39', priority=10, status=not done}
+42. Task{name='Task 25', priority=9, status=not done}
+43. Task{name='Task 49', priority=8, status=not done}
+44. Task{name='Task 15', priority=5, status=not done}
+45. Task{name='Task 33', priority=2, status=not done}
+46. Task{name='Task 11', priority=6, status=not done}
+47. Task{name='Task 3', priority=5, status=not done}
+48. Task{name='Task 20', priority=6, status=not done}
+49. Task{name='Task 39', priority=10, status=not done}
+50. Task{name='Task 43', priority=3, status=not done}

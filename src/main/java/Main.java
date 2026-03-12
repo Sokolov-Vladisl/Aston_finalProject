@@ -1,5 +1,5 @@
-package main.java;
 
+import collections.MyCustomCollection;
 import inputStrategy.DataFillStrategy;
 import inputStrategy.fileFill;
 import inputStrategy.manualFill;
@@ -17,8 +17,13 @@ import search.MyBinarySearch;
 //import sorting.QuickSort;
 
 
+import java.nio.file.*;
 import java.util.Comparator;
 import java.util.Scanner;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import validation.Validation;
 
@@ -27,11 +32,15 @@ import validation.Validation;
 public class Main {
 
     private static final Scanner scanner = new Scanner(System.in);
+
+    // Поля для хранения коллекций
     private static MyCustomCollection<MyCustomModel> modelCollection = null;
+
+    // Поля для фасадов заполнения
     private static final MyCustomModelFiller modelFiller = new MyCustomModelFiller();
 
     // Поля для сервисов сортировки
-   private static final SortService personSortService = new SortService();
+    private static final SortService personSortService = new SortService();
 
 
     public static int M=0;
@@ -70,8 +79,8 @@ public class Main {
             int choice = getChoice();
 
             switch (choice) {
-                case 1:
-                    fillCollection();
+                case 1: // Заполнить MyCustomModel
+                    fillCollection(modelCollection, modelFiller);
                     break;
                 case 2: // Сортировать MyCustomModel
 
@@ -237,18 +246,24 @@ public class Main {
         int sortChoice = getChoice();
 
         SortService service = new SortService();
+        String sortType="nothing";
 
         switch (sortChoice) {
             case 1:
                 service.setStrategy(new QuickSort<>());
                 Comparator<MyCustomModel> comparator = choiceComparator();
                 service.sort(collection, comparator);
+                System.out.println("Введите название файла для сохранения:");
+                sortType = scanner.next();
                 System.out.println("Коллекция отсортирована!");
+                saveSortedToFile(sortType);
                 break;
             case 2:
+                sortType="sorted_by_even";
                 service.setStrategy(new EvenQuickSort<>(MyCustomModel::getNumber));
                 service.sort(collection);
                 System.out.println("Коллекция отсортирована!");
+                saveSortedToFile(sortType);
                 break;
             default:
                 System.out.println("Неверный выбор.");
@@ -303,6 +318,7 @@ public class Main {
                 comparator = comparator.thenComparing(fieldComparator);
             }
 
+
             System.out.println("Поле добавлено к сортировке");
             fieldsSelected++;
         }
@@ -310,12 +326,16 @@ public class Main {
         return comparator;
     }
 
-
+    private static void saveSortedToFile(String sortType) {
+        if (modelCollection == null || modelCollection.size() == 0) {
+            System.out.println("Нет данных для сохранения!");
+            return;
+        }
         try {
             Files.createDirectories(Paths.get("output"));
 
-            String filename = "output/sorted_by_" + sortType + ".txt";
-            Path filePath = Paths.get(filename);
+            String filename = "output/" + sortType;
+            Path filePath = Paths.get(filename + ".txt");
 
             List<String> lines = new ArrayList<>();
             lines.add("=== РЕЗУЛЬТАТ СОРТИРОВКИ ===");
@@ -331,9 +351,21 @@ public class Main {
                 MyCustomModel item = modelCollection.get(i);
                 lines.add((i + 1) + ". " + item.toString());
             }
+            lines.add("");lines.add("");lines.add("");lines.add("");
+
 
             Files.write(filePath, lines, StandardOpenOption.CREATE,
-                       StandardOpenOption.TRUNCATE_EXISTING);
+                       StandardOpenOption.APPEND);
+
+            filePath = Paths.get(filename + ".csv");
+            lines.clear();
+            for (int i = 0; i < modelCollection.size(); i++) {
+                MyCustomModel item = modelCollection.get(i);
+                lines.add(item.toFileData());
+            }
+
+            Files.write(filePath, lines, StandardOpenOption.CREATE,
+                    StandardOpenOption.APPEND);
 
             System.out.println("✅ Отсортированный список сохранен в файл: " + filename);
 
@@ -350,30 +382,31 @@ public class Main {
         saveSortedToFile("current");
     }
 
-    private static void searchData() {
-        if (modelCollection == null || modelCollection.size() == 0) {
-            System.out.println("Сначала заполните коллекцию.");
+    private static <T extends Comparable<T>> void searchData(MyCustomCollection<T> collection) {
+        if (collection == null || collection.size() == 0) {
+            System.out.println("Сначала заполните и отсортируйте коллекцию Задач.");
             return;
         }
 
-        System.out.println("Введите данные для поиска:");
-        MyCustomModel target = null;
+        System.out.println("Введите данные для поиска Задачи:");
+        T target = null;
+
 
         System.out.print("Название: ");
         String name = scanner.nextLine();
         System.out.print("Приоритет: ");
         String number = scanner.nextLine();
-        System.out.print("Статус (true/false): ");
+        System.out.print("Статус (выполнена? true/false): ");
         String isTrue = scanner.nextLine();
 
         try {
-            target = MyCustomModel.builder()
+            target = (T) MyCustomModel.builder()
                     .name(name)
                     .number(Integer.parseInt(number))
                     .isTrue(Boolean.parseBoolean(isTrue))
                     .build();
         } catch (RuntimeException e) {
-            System.out.println("Не получилось собрать объект.");
+            System.out.println("Не получилось собрать объект. Попробуйте еще раз.");
             return;
         }
 
@@ -387,42 +420,44 @@ public class Main {
         }
     }
 
-    private static void occurrenceCounter() {
-        if (modelCollection == null || modelCollection.size() == 0) {
-            System.out.println("Сначала заполните коллекцию.");
+    private static <T> void occurrenceCounter(MyCustomCollection<T> collection) {
+        if (collection == null || collection.size() == 0) {
+            System.out.println("Сначала заполните коллекцию Задач.");
             return;
         }
 
-        System.out.println("Введите данные для подсчёта вхождений:");
-        MyCustomModel target = null;
+        System.out.println("Введите данные для подсчёта вхождений Задачи:");
+        T target = null;
 
         System.out.print("Название: ");
         String name = scanner.nextLine();
         System.out.print("Приоритет: ");
         String number = scanner.nextLine();
-        System.out.print("Статус (true/false): ");
+        System.out.print("Статус (выполнена? true/false): ");
         String isTrue = scanner.nextLine();
 
         try {
-            target = MyCustomModel.builder()
+            target = (T) MyCustomModel.builder()
                     .name(name)
                     .number(Integer.parseInt(number))
                     .isTrue(Boolean.parseBoolean(isTrue))
                     .build();
         } catch (RuntimeException e) {
-            System.out.println("Не получилось собрать объект.");
+            System.out.println("Не получилось собрать объект. Попробуйте еще раз.");
             return;
         }
 
-        long occurrences = modelCollection.getOccurrenceCounter(target);
-        System.out.println("Элемент встречается " + occurrences + " раз(а).");
+
+        long occurrences = collection.getOccurrenceCounter(target);
+        System.out.println("Элемент встречается в коллекции " + occurrences + " раз(а).");
     }
 
+    // Пример метода для печати коллекции
     private static void printCollection(MyCustomCollection<?> collection) {
         if (collection == null) {
-            System.out.println("Коллекция пуста.");
+            System.out.println("Коллекция Задач пуста (не инициализирована).");
         } else {
-            System.out.println("Текущая коллекция:");
+            System.out.println("Текущая коллекция Задач:");
             for (int i = 0; i < collection.size(); i++) {
                 System.out.println(collection.get(i));
             }
